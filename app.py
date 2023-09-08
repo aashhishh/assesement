@@ -69,14 +69,14 @@ def add_client():
         user_id = get_jwt_identity()
         
         advisor = User.query.get(user_id['sub'])
-        print(advisor)
+
         # Check if the advisor exists and has the role 'Advisor'
         if advisor is None or advisor.role != 'Advisor':
             return jsonify({'message': 'Advisor not found'}), 404
 
 
         client_name = data.get('name')
-        client_mobile = data.get('mobile')
+        client_mobile = str(data.get('mobile'))
         if not re.match(r'^\d{10}$', client_mobile):
                     return jsonify({'message': 'Invalid Client Phone number!'}), 400
         
@@ -163,7 +163,7 @@ def add_product():
         db.session.add(new_product)
         db.session.commit()
         
-        return jsonify({'message': 'Product added successfully', 'product_id': new_product.product_id, 'name': new_product.name, 'category': new_product.category})
+        return jsonify({'message': 'Product added successfully', 'product_id': new_product.product_id, 'name': new_product.product_name, 'category': new_product.category})
 
     except KeyError as e:
             missing_field = str(e)
